@@ -5,13 +5,21 @@
         </h2>
 
         <div class="mt-10 grid gap-x-8 gap-y-12 sm:grid-cols-2 md:mt-11 lg:grid-cols-4">
-            @foreach ($references as $reference)
+            @forelse ($references as $reference)
                 <x-reference-card
-                    :title="$reference['title']"
-                    :date="$reference['date']"
-                    :image="$reference['image']"
+                    :title="$reference->title"
+                    :date="$reference->reference_date"
+                    :image="$reference->image_url"
                 />
-            @endforeach
+            @empty
+                @foreach (config('site.references') as $reference)
+                    <x-reference-card
+                        :title="$reference['title']"
+                        :date="$reference['date']"
+                        :image="asset($reference['image'])"
+                    />
+                @endforeach
+            @endforelse
         </div>
     </x-container>
 </section>
