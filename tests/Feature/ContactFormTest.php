@@ -1,6 +1,6 @@
 <?php
 
-test('a valid contact message is accepted', function () {
+test('a valid contact message is stored', function () {
     $this->postJson(route('contact.store'), [
         'name' => 'Kovács Anna',
         'email' => 'anna@example.com',
@@ -10,6 +10,12 @@ test('a valid contact message is accepted', function () {
         ->assertJson([
             'message' => 'Köszönjük! Üzenetét megkaptuk, hamarosan felvesszük Önnel a kapcsolatot.',
         ]);
+
+    $this->assertDatabaseHas('contact_messages', [
+        'name' => 'Kovács Anna',
+        'email' => 'anna@example.com',
+        'message' => 'Szeretnék ajánlatot kérni egy egyedi acélszerkezetre.',
+    ]);
 });
 
 test('all contact fields are required', function () {
@@ -20,6 +26,8 @@ test('all contact fields are required', function () {
             'email' => 'Kérjük, adja meg az e-mail címét.',
             'message' => 'Kérjük, írja meg az üzenetét.',
         ]);
+
+    $this->assertDatabaseEmpty('contact_messages');
 });
 
 test('the contact e-mail address must be valid', function () {
@@ -31,6 +39,8 @@ test('the contact e-mail address must be valid', function () {
         ->assertUnprocessable()
         ->assertJsonValidationErrors(['email' => 'Kérjük, érvényes e-mail címet adjon meg.'])
         ->assertJsonMissingValidationErrors(['name', 'message']);
+
+    $this->assertDatabaseEmpty('contact_messages');
 });
 
 test('contact submissions are rate limited', function () {

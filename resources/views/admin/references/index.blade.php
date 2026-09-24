@@ -1,6 +1,6 @@
 <x-layout title="Referenciák – Admin">
     <main class="mx-auto max-w-4xl px-6 py-16">
-        @include('admin.references.nav')
+        @include('admin.nav')
 
         <div class="mt-10 flex items-center justify-between gap-6">
             <h1 class="font-display text-3xl font-bold tracking-tight">Referenciák</h1>

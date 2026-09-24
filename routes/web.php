@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ContactMessageController;
 use App\Http\Controllers\Admin\HeroSectionController;
 use App\Http\Controllers\Admin\ReferenceController;
 use App\Http\Controllers\ContactController;
@@ -20,4 +21,5 @@ Route::prefix('admin')->name('admin.')->middleware('auth.basic')->group(function
     Route::get('hero', [HeroSectionController::class, 'edit'])->name('hero.edit');
     Route::put('hero', [HeroSectionController::class, 'update'])->name('hero.update');
     Route::resource('references', ReferenceController::class)->except('show');
+    Route::get('messages', [ContactMessageController::class, 'index'])->name('messages.index');
 });

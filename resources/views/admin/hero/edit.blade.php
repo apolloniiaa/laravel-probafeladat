@@ -1,9 +1,8 @@
 <x-layout title="Hero szekció – Admin">
     <main class="mx-auto max-w-2xl px-6 py-16">
-        <div class="flex items-baseline justify-between gap-6">
-            <h1 class="font-display text-3xl font-bold tracking-tight">Hero szekció</h1>
-            <a href="{{ route('home') }}" class="font-mono text-sm text-neutral-500 hover:text-ink">Weboldal megtekintése</a>
-        </div>
+        @include('admin.nav')
+
+        <h1 class="mt-10 font-display text-3xl font-bold tracking-tight">Hero szekció</h1>
 
         @session('status')
             <p role="status" class="mt-8 border border-neutral-300 px-4 py-3 text-sm">{{ $value }}</p>
