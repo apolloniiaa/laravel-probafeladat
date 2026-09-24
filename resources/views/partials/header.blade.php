@@ -1,6 +1,6 @@
 <header class="border-b border-neutral-200 bg-white">
-    <x-container>
-        <div class="grid h-16 grid-cols-[1fr_auto] items-center md:h-18 md:grid-cols-[1fr_auto_1fr] lg:px-10">
+    <x-container class="lg:px-18">
+        <div class="grid h-16 grid-cols-[1fr_auto] items-center md:h-18 md:grid-cols-[1fr_auto_1fr]">
             <x-logo class="justify-self-start" />
 
             <nav aria-label="Főmenü" class="hidden md:block">

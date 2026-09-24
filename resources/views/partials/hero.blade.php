@@ -1,5 +1,5 @@
 <section class="relative isolate flex min-h-[560px] items-center overflow-hidden bg-ink pt-9 text-white md:min-h-[780px]">
-    <img src="{{ $hero->image_url }}" alt="" class="absolute inset-0 -z-10 size-full object-cover">
+    <img src="{{ $hero->image_url }}" alt="" fetchpriority="high" class="absolute inset-0 -z-10 size-full object-cover">
     <div class="absolute inset-0 -z-10 bg-linear-to-r from-black/80 via-black/40 via-50% to-black/25" aria-hidden="true"></div>
     <div class="absolute inset-0 -z-10 bg-linear-to-b from-transparent from-65% to-black/55" aria-hidden="true"></div>
 

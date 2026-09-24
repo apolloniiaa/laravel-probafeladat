@@ -75,6 +75,10 @@ if (contactForm) {
             });
             const data = await response.json().catch(() => ({}));
 
+            if (!dialog.open) {
+                return;
+            }
+
             if (response.ok) {
                 successMessage.textContent = data.message;
                 contactForm.reset();
