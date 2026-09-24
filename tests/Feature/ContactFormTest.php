@@ -40,10 +40,10 @@ test('all contact fields are required', function () {
     Mail::assertNothingSent();
 });
 
-test('the contact e-mail address must be valid', function () {
+test('the contact e-mail address must be valid', function (string $email) {
     $this->postJson(route('contact.store'), [
         'name' => 'Kovács Anna',
-        'email' => 'not-an-email',
+        'email' => $email,
         'message' => 'Szia!',
     ])
         ->assertUnprocessable()
@@ -52,7 +52,17 @@ test('the contact e-mail address must be valid', function () {
 
     $this->assertDatabaseEmpty('contact_messages');
     Mail::assertNothingSent();
-});
+})->with(['not-an-email', 'test@gmail']);
+
+test('complete e-mail addresses are accepted', function (string $email) {
+    $this->postJson(route('contact.store'), [
+        'name' => 'Kovács Anna',
+        'email' => $email,
+        'message' => 'Szia!',
+    ])->assertOk();
+
+    $this->assertDatabaseHas('contact_messages', ['email' => $email]);
+})->with(['test@gmail.com', 'name@example.hu']);
 
 test('contact submissions are rate limited', function () {
     $payload = ['name' => 'Kovács Anna', 'email' => 'anna@example.com', 'message' => 'Szia!'];
