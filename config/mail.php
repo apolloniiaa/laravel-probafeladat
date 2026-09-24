@@ -115,4 +115,15 @@ return [
         'name' => env('MAIL_FROM_NAME', env('APP_NAME', 'Laravel')),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Admin Notification Addresses
+    |--------------------------------------------------------------------------
+    |
+    | Comma-separated list of addresses notified about new contact messages.
+    |
+    */
+
+    'admin_addresses' => array_filter(array_map('trim', explode(',', (string) env('MAIL_ADMIN_ADDRESSES')))),
+
 ];
