@@ -1,58 +1,81 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# FÉM Stúdió
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+The landing page and admin area for FÉM, a fictional industrial design studio in Budapest. The public page follows the supplied Figma design. The admin area manages the hero section and the references, and receives contact messages.
 
-## About Laravel
+## Tech stack
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- PHP 8.3+ (developed on 8.4) and Laravel 13
+- Blade components, Tailwind CSS v4 and Vite
+- SQLite
+- Pest for tests and Laravel Pint for code style
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Main features
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+**Public site**
 
-## Learning Laravel
+- Responsive landing page with a header, hero, references ("Munkáink") and footer
+- Hero and references are loaded from the database, with the Figma content as a fallback
+- Contact modal with an asynchronous form, Hungarian validation messages and rate limiting
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+**Admin area** (HTTP Basic authentication; routes `/admin/hero`, `/admin/references` and `/admin/messages`)
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- Edit the hero title, description and background image
+- Create, list, edit and delete references (title, cover image, date)
+- Contact message inbox, newest first
+- CSV export of all messages (UTF-8, Excel-compatible)
+- E-mail notification to the configured administrator addresses for each new message
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+## Requirements
 
-## Agentic Development
+- PHP 8.3+ with the `sqlite` and `gd` extensions
+- Composer
+- Node.js 20.19+ or 22.12+ (required by Vite 8)
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+## Installation
 
 ```bash
-composer require laravel/boost --dev
+git clone https://github.com/apolloniiaa/laravel-probafeladat.git fem
+cd fem
 
-php artisan boost:install
+composer install
+npm install
+
+cp .env.example .env
+php artisan key:generate
+
+touch database/database.sqlite
+php artisan migrate
+php artisan storage:link
+
+npm run build
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+Set the notification recipients in `.env` (comma-separated). With the default `MAIL_MAILER=log`, the e-mails are written to `storage/logs/laravel.log`:
 
-## Contributing
+```dotenv
+MAIL_ADMIN_ADDRESSES=admin@example.com
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Create an administrator account for the admin area:
 
-## Code of Conduct
+```bash
+php artisan tinker --execute="App\Models\User::create(['name' => 'Admin', 'email' => 'admin@example.com', 'password' => 'password'])"
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Start the application with `php artisan serve` (or through Laravel Herd), then open `/` for the site and `/admin/hero` for the admin area. The browser displays an HTTP Basic Authentication login prompt; enter the e-mail address and password above there.
 
-## Security Vulnerabilities
+Run the tests with:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+php artisan test
+```
 
-## License
+## Admin access
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+The administrator account and these credentials are created by running the Tinker command in the Installation section.
+
+- Admin URL: `/admin/hero`
+- E-mail: `admin@example.com`
+- Password: `password`
+
+The same credentials give access to the References and Messages sections of the admin area.
