@@ -2,7 +2,13 @@
     <main class="mx-auto max-w-4xl px-6 py-16">
         @include('admin.nav')
 
-        <h1 class="mt-10 font-display text-3xl font-bold tracking-tight">Üzenetek</h1>
+        <div class="mt-10 flex items-center justify-between gap-6">
+            <h1 class="font-display text-3xl font-bold tracking-tight">Üzenetek</h1>
+
+            @if ($messages->isNotEmpty())
+                <x-button :href="route('admin.messages.export')">Exportálás (CSV)</x-button>
+            @endif
+        </div>
 
         @if ($messages->isEmpty())
             <p class="mt-8 text-sm text-neutral-500">Még nem érkezett üzenet.</p>
