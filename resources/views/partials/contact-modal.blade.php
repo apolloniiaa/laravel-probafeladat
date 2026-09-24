@@ -1,5 +1,3 @@
-{{-- UI only for now: method="dialog" just closes the modal on submit.
-     Later: method="POST" to a contact route, plus @csrf. --}}
 <dialog
     id="contact-modal"
     aria-labelledby="contact-modal-title"
@@ -14,26 +12,41 @@
             </form>
         </div>
 
-        <form method="dialog" class="mt-8 flex flex-col gap-5">
+        <form action="{{ route('contact.store') }}" method="POST" novalidate data-contact-form class="mt-8 flex flex-col gap-5">
+            @csrf
+
             <div>
                 <label for="contact-name" class="font-mono text-xs tracking-widest text-neutral-500">Név</label>
-                <input id="contact-name" name="name" type="text" autocomplete="name" required
-                       class="mt-2 block h-11 w-full border border-neutral-300 px-4 outline-none focus:border-ink">
+                <input id="contact-name" name="name" type="text" autocomplete="name" required aria-describedby="contact-name-error"
+                       class="mt-2 block h-11 w-full border border-neutral-300 px-4 outline-none focus:border-ink aria-invalid:border-red-600">
+                <p id="contact-name-error" data-error-for="name" class="mt-2 text-sm text-red-600" hidden></p>
             </div>
 
             <div>
-                <label for="contact-email" class="font-mono text-xs tracking-widest text-neutral-500">E-mail</label>
-                <input id="contact-email" name="email" type="email" autocomplete="email" required
-                       class="mt-2 block h-11 w-full border border-neutral-300 px-4 outline-none focus:border-ink">
+                <label for="contact-email" class="font-mono text-xs tracking-widest text-neutral-500">E-mail cím</label>
+                <input id="contact-email" name="email" type="email" autocomplete="email" required aria-describedby="contact-email-error"
+                       class="mt-2 block h-11 w-full border border-neutral-300 px-4 outline-none focus:border-ink aria-invalid:border-red-600">
+                <p id="contact-email-error" data-error-for="email" class="mt-2 text-sm text-red-600" hidden></p>
             </div>
 
             <div>
                 <label for="contact-message" class="font-mono text-xs tracking-widest text-neutral-500">Üzenet</label>
-                <textarea id="contact-message" name="message" rows="5" required
-                          class="mt-2 block w-full resize-none border border-neutral-300 px-4 py-3 outline-none focus:border-ink"></textarea>
+                <textarea id="contact-message" name="message" rows="5" required aria-describedby="contact-message-error"
+                          class="mt-2 block w-full resize-none border border-neutral-300 px-4 py-3 outline-none focus:border-ink aria-invalid:border-red-600"></textarea>
+                <p id="contact-message-error" data-error-for="message" class="mt-2 text-sm text-red-600" hidden></p>
             </div>
 
-            <x-button type="submit" class="w-full">Üzenet küldése</x-button>
+            <p data-form-error role="alert" class="text-sm text-red-600" hidden></p>
+
+            <x-button type="submit" class="w-full disabled:cursor-wait disabled:opacity-60">Üzenet küldése</x-button>
         </form>
+
+        <div data-contact-success role="status" tabindex="-1" class="mt-8 outline-none" hidden>
+            <p data-contact-success-message class="text-base leading-relaxed text-neutral-700"></p>
+
+            <form method="dialog" class="mt-8">
+                <x-button type="submit" class="w-full">Bezárás</x-button>
+            </form>
+        </div>
     </div>
 </dialog>
