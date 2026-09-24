@@ -101,3 +101,12 @@ if (contactForm) {
         success.hidden = true;
     });
 }
+
+document.querySelectorAll('[data-file-input]').forEach((input) => {
+    const fileName = document.querySelector(`[data-file-name="${input.id}"]`);
+    const placeholder = fileName.textContent;
+
+    input.addEventListener('change', () => {
+        fileName.textContent = input.files[0]?.name ?? placeholder;
+    });
+});

@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\Admin\HeroSectionController;
 use App\Http\Controllers\ContactController;
+use App\Models\HeroSection;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -28,9 +30,17 @@ Route::get('/', function () {
         ],
     ];
 
-    return view('home', ['references' => $references]);
+    return view('home', [
+        'hero' => HeroSection::current(),
+        'references' => $references,
+    ]);
 })->name('home');
 
 Route::post('/kapcsolat', [ContactController::class, 'store'])
     ->middleware('throttle:6,1')
     ->name('contact.store');
+
+Route::prefix('admin')->name('admin.')->middleware('auth.basic')->group(function () {
+    Route::get('hero', [HeroSectionController::class, 'edit'])->name('hero.edit');
+    Route::put('hero', [HeroSectionController::class, 'update'])->name('hero.update');
+});
